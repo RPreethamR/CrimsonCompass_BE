@@ -22,12 +22,14 @@ import java.util.stream.Collectors;
 public class PlaceController {
 
     private final IPlaceService placeService;
-    private final IReviewService reviewService; // New field for IReviewService
+    private final IReviewService reviewService;
+    private final com.backend.CrimsonCompass.util.PlaceMapper placeMapper;
 
     @Autowired
-    public PlaceController(IPlaceService placeService, IReviewService reviewService) { // Updated constructor
+    public PlaceController(IPlaceService placeService, IReviewService reviewService, com.backend.CrimsonCompass.util.PlaceMapper placeMapper) {
         this.placeService = placeService;
         this.reviewService = reviewService;
+        this.placeMapper = placeMapper;
     }
 
     // GET /api/places/search?q=La
@@ -110,26 +112,8 @@ public class PlaceController {
 
     private PlaceResponseDTO convertToResponseDTO(Place place) {
         List<PlaceImage> images = placeService.getImagesByPlaceId(place.getPlaceId());
-        List<PlaceImageResponseDTO> imageResponses = images.stream()
-                .map(image -> new PlaceImageResponseDTO(image.getImageId(), image.getImageUrl()))
-                .collect(Collectors.toList());
-
-        List<ReviewResponseDTO> reviews = reviewService.getReviewsByEntity((long) place.getPlaceId(), "Place"); // New block to get reviews
-
-        return new PlaceResponseDTO(
-                place.getPlaceId(),
-                place.getName(),
-                place.getDescription(),
-                place.getLocation(),
-                (double) place.getLatitude(),
-                (double) place.getLongitude(),
-                place.getCountry(),
-                place.getState(),
-                place.getCity(),
-                place.getCategory().getName(), // Updated line
-                imageResponses, // Include images here
-                reviews // Include reviews here
-        );
+        List<ReviewResponseDTO> reviews = reviewService.getReviewsByEntity((long) place.getPlaceId(), "Place");
+        return placeMapper.toResponseDTO(place, images, reviews);
     }
 
 }

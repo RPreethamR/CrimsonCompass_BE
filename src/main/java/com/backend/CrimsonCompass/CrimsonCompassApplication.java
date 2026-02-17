@@ -8,9 +8,12 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import org.springframework.scheduling.annotation.EnableAsync;
+
 @SpringBootApplication
 @EnableJpaRepositories
 @ConfigurationPropertiesScan
+@EnableAsync
 public class CrimsonCompassApplication {
 
 	public static void main(String[] args) {

@@ -46,9 +46,6 @@ public class Itinerary {
 
     private Integer entityId;
 
-    //@ManyToOne
-    //@JoinColumn(name = "booking_id")
-    //private Booking booking; // Commented out since Booking class doesn't exist yet
 
     @ManyToOne
     @JoinColumn(name = "master_itinerary_id") // New field added

@@ -20,11 +20,13 @@ public class PlaceService implements IPlaceService {
     private final PlaceRepository placeRepository;
     private final PlaceImageRepository placeImageRepository;
     private final PlaceCategoryRepository placeCategoryRepository;
+    private final com.backend.CrimsonCompass.util.PlaceMapper placeMapper;
 
-    public PlaceService(PlaceRepository placeRepository, PlaceImageRepository placeImageRepository, PlaceCategoryRepository placeCategoryRepository) {
+    public PlaceService(PlaceRepository placeRepository, PlaceImageRepository placeImageRepository, PlaceCategoryRepository placeCategoryRepository, com.backend.CrimsonCompass.util.PlaceMapper placeMapper) {
         this.placeRepository = placeRepository;
         this.placeImageRepository = placeImageRepository;
         this.placeCategoryRepository = placeCategoryRepository;
+        this.placeMapper = placeMapper;
     }
 
 
@@ -69,24 +71,10 @@ public class PlaceService implements IPlaceService {
         List<Place> places = placeRepository.searchPlaces(query);
 
         return places.stream()
-                .map(place -> new PlaceResponseDTO(
-                        place.getPlaceId(),
-                        place.getName(),
-                        place.getDescription(),
-                        place.getLocation(),
-                        place.getLatitude(),
-                        place.getLongitude(),
-                        place.getCountry(),
-                        place.getState(),
-                        place.getCity(),
-                        place.getCategory().getName(),
-                        place.getImages().stream()
-                                .map(img -> new PlaceImageResponseDTO(
-                                        img.getImageId(),
-                                        img.getImageUrl()
-                                ))
-                                .collect(Collectors.toList()),
-                        List.of()
+                .map(place -> placeMapper.toResponseDTO(
+                        place,
+                        place.getImages(),
+                        java.util.Collections.emptyList() // No reviews for search results currently
                 ))
                 .collect(Collectors.toList());
     }

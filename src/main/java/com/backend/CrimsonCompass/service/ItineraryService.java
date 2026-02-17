@@ -29,8 +29,6 @@ public class ItineraryService implements IItineraryService {
     @Autowired
     private UserItineraryRepository userItineraryRepository;
 
-    //@Autowired
-    //private BookingRepository bookingRepository;
 
     @Override
     public Itinerary createItinerary(ItineraryDTO dto) {

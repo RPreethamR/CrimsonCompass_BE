@@ -13,13 +13,21 @@ import java.util.Optional;
 @Repository
 public interface PlaceRepository extends JpaRepository<Place, Integer> {
 
-    Optional<Place> findById(Integer placeId); // Find a place by ID
+    @org.springframework.data.jpa.repository.EntityGraph(attributePaths = "images")
+    Optional<Place> findById(Integer placeId); // Find a place by ID with images
 
+    @org.springframework.data.jpa.repository.EntityGraph(attributePaths = "images")
     List<Place> findByCategory(PlaceCategory category); // Find places by category
 
+    @org.springframework.data.jpa.repository.EntityGraph(attributePaths = "images")
     List<Place> findByCity(String city); // Find places by city
 
+    @org.springframework.data.jpa.repository.EntityGraph(attributePaths = "images")
     List<Place> findByCountry(String country); // Find places by country
+
+    @Override
+    @org.springframework.data.jpa.repository.EntityGraph(attributePaths = "images")
+    List<Place> findAll();
 
     @Query("SELECT DISTINCT p FROM Place p LEFT JOIN FETCH p.images WHERE " +
             "LOWER(p.name) LIKE LOWER(CONCAT('%', :query, '%')) OR " +

@@ -3,7 +3,7 @@ package com.backend.CrimsonCompass.service;
 import com.backend.CrimsonCompass.dto.UserSyncRequest;
 import com.backend.CrimsonCompass.model.User;
 import com.backend.CrimsonCompass.repository.UserRepository;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -12,11 +12,11 @@ import java.util.Optional;
 public class UserService implements IUserService {
 
     private final UserRepository userRepository;
-    private final BCryptPasswordEncoder passwordEncoder;
+    private final org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, org.springframework.security.crypto.password.PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
-        this.passwordEncoder = new BCryptPasswordEncoder();
+        this.passwordEncoder = passwordEncoder;
     }
 
     public User registerUser(User user) {
@@ -82,16 +82,15 @@ public class UserService implements IUserService {
             newUser.setLastName("");
         }
 
-        newUser.setRole(User.Role.valueOf("traveler")); // Default role
+        newUser.setRole(User.Role.traveler); // Default role
         userRepository.save(newUser);
     }
 
     public Optional<User> getUserByAuthId(String authID) {return userRepository.findByAuthId(authID);}
 
-    // 🔥 NEW METHOD used in BookingController
     public Integer getUserIdFromEmail(String email) {
         return userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found"))
+                .orElseThrow(() -> new com.backend.CrimsonCompass.exception.ResourceNotFoundException("User not found with email: " + email))
                 .getUserId();
     }
 }
