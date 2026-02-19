@@ -15,7 +15,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class ResetController {
 
-    private final PasswordResetService passwordResetService;
+    private final com.backend.CrimsonCompass.service.IPasswordResetService passwordResetService;
 
     @PostMapping("/request-reset")
     public ResponseEntity<String> requestReset(@RequestBody Map<String, String> body) throws Exception {

@@ -16,11 +16,10 @@ public class PasswordResetService implements IPasswordResetService {
 
     private final UserRepository userRepository;
     private final PasswordResetTokenRepository tokenRepository;
-    private final EmailService emailService;
-
+    private final IEmailService emailService;
     private final PasswordEncoder passwordEncoder;
 
-    public PasswordResetService(UserRepository userRepository, PasswordResetTokenRepository tokenRepository, EmailService emailService, PasswordEncoder passwordEncoder) {
+    public PasswordResetService(UserRepository userRepository, PasswordResetTokenRepository tokenRepository, IEmailService emailService, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.tokenRepository = tokenRepository;
         this.emailService = emailService;
